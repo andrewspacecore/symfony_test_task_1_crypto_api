@@ -1,4 +1,7 @@
-
+.*
+!.gitignore
+!.env.dist
+!docker-compose.dev.dist.yml
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -7,4 +10,7 @@
 /public/bundles/
 /var/
 /vendor/
+
+docker-compose.dev.yml
+.env
 ###< symfony/framework-bundle ###

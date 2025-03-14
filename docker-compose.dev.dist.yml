@@ -1,0 +1,71 @@
+services:
+  app:
+    extra_hosts:
+      # for xdebug
+      - "host.docker.internal:host-gateway"
+    build:
+      context: .
+      dockerfile: ./docker/dev/Dockerfile
+    container_name: app_dev
+    volumes:
+      - .:/var/www/html:delegated,rw,cached
+      # log php_error and cron
+      - ./docker/dev/log/app:/var/log
+    ports:
+      # local-port:container-port
+      - ${LOCAL_PHP_PORT:-9001}:9000
+      - ${LOCAL_PHP_XDEBUG_PORT:-9004}:9003
+    networks:
+      - app_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: app_nginx_dev
+    volumes:
+      - .:/var/www/html:delegated,rw,cached
+      - ./docker/dev/nginx/conf:/etc/nginx/conf.d
+      # log nginx
+      - ./docker/dev/log/nginx:/var/log/nginx
+    ports:
+      # local-port:container-port
+      - ${LOCAL_NGINX_PORT:-8000}:8080
+    depends_on:
+      - app
+    networks:
+      - app_network
+
+  redis:
+    image: redis:7.4.1
+    container_name: app_redis_dev
+    volumes:
+      - redis:/data
+    ports:
+      # local-port:container-port
+      - ${LOCAL_REDIS_PORT:-6980}:6379
+    networks:
+      - app_network
+
+  postgres:
+    image: postgres:17
+    container_name: app_postgres_dev
+    environment:
+      # postgres user
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      # postgres password
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      # postgres database name
+      POSTGRES_DB: ${DB_DATABASE:-crypto}
+    ports:
+      - ${LOCAL_POSTGRES_PORT:-5433}:5432  # local-port:container-port
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  postgres:
+  redis:
