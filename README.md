@@ -1,6 +1,6 @@
 **TASK.md**: Description of the task
 - **README.md**: Project documentation.
-- **.env.example**:
+- **.env.dist**:
   Example environment settings file to copy to `.env` to configure the project.
 
 ### Instructions for setting up the project
@@ -51,7 +51,7 @@ cp .env.dist .env
  ```
 8. See server http://localhost:8000/
 
-Send a GET request to /api/price/{cryptoCode}/{fiatCode}/{sort?} with the following JSON body:
+Send a GET request to /api/crypto/price/{cryptoCode}/{fiatCode}/{sort?} with the following JSON body:
 - api/price/btc/usd/day
 - cryptocode = BTC, ETH, LTC, DOGE, XRP
 - fiatCode = USD, EUR, UAH, GBP, JPY
@@ -93,7 +93,7 @@ Send a GET request to /api/price/{cryptoCode}/{fiatCode}/{sort?} with the follow
   }
 ]
 ```
-- /api/price/btc/usd
+- /api/crypto/price/btc/usd
 ```json
 {
   "price": 83824.56
