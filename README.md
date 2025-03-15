@@ -49,6 +49,7 @@ cp .env.dist .env
  ```bash
   make command-crypto-price or sh ./docker/dev/cron/check-crypto-price-command.sh
  ```
+8. See server http://localhost:8000/
 
 Send a GET request to /api/price/{cryptoCode}/{fiatCode}/{sort?} with the following JSON body:
 - api/price/btc/usd/day
